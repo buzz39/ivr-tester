@@ -97,8 +97,20 @@ npm run build
 npm start
 ```
 
-### 3. Execution Flow
-Once started, the application will:
+### 3. Using the Dashboard
+Once the application is running, you can access the web dashboard to trigger calls manually.
+
+1.  Open your browser and navigate to `http://localhost:8080` (or the port defined in your `.env` file).
+2.  Enter the **Target Phone Number** in E.164 format (e.g., `+18005559876`).
+3.  Click **Start Call**.
+
+The application will initiate the call and you can monitor the logs in your terminal.
+
+### 4. Auto-Start (Optional)
+If you have defined `TARGET_PHONE_NUMBER` in your `.env` file, the application will automatically initiate a call to that number immediately upon startup.
+
+### 5. Execution Flow
+Once a call is initiated (either via Dashboard or Auto-Start), the application will:
 1.  Start a local Express server to listen for ACS events.
 2.  Initiate an outbound call from `SOURCE_PHONE_NUMBER` to `TARGET_PHONE_NUMBER`.
 3.  Upon connection (`CallConnected`), it starts listening to the audio.
