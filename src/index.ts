@@ -13,7 +13,7 @@ async function main() {
   const tester = new IvrTester(callManager, llm);
   const app = createServer(callManager);
 
-  app.listen(config.port, () => {
+  const server = app.listen(config.port, () => {
     console.log(`Server listening on port ${config.port}`);
     console.log(`Callback URI should be configured to: ${config.callbackUri}`);
 
@@ -23,6 +23,17 @@ async function main() {
         tester.run();
     } else {
         console.log("Please set TARGET_PHONE_NUMBER in .env to start the test.");
+    }
+  });
+
+  server.on('error', (e: any) => {
+    if (e.code === 'EADDRINUSE') {
+      console.error(`Error: Port ${config.port} is already in use.`);
+      console.error(`Please stop the process running on port ${config.port} or update the PORT variable in your .env file.`);
+      process.exit(1);
+    } else {
+      console.error('Server error:', e);
+      throw e;
     }
   });
 }
