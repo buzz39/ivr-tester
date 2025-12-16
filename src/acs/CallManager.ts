@@ -8,6 +8,7 @@ export class CallManager extends EventEmitter {
   private client: CallAutomationClient;
   private callConnection: CallConnection | undefined;
   private callMedia: CallMedia | undefined;
+  private targetParticipant: PhoneNumberIdentifier | undefined;
 
   constructor() {
     super();
@@ -17,6 +18,7 @@ export class CallManager extends EventEmitter {
   async startCall(targetPhoneNumber: string) {
     console.log(`Starting call to ${targetPhoneNumber}...`);
     const target: PhoneNumberIdentifier = { phoneNumber: targetPhoneNumber };
+    this.targetParticipant = target;
 
     // CallInvite requires targetParticipant
     const callInvite: CallInvite = { targetParticipant: target };
@@ -51,7 +53,7 @@ export class CallManager extends EventEmitter {
   }
 
   async sendDtmf(tones: string[]) {
-    if (!this.callMedia) return;
+    if (!this.callMedia || !this.targetParticipant) return;
 
     // Convert string tones to DtmfTone enum
     const dtmfTones: DtmfTone[] = tones.map(t => {
@@ -77,7 +79,7 @@ export class CallManager extends EventEmitter {
     }) as unknown as DtmfTone[];
 
     // Use sendDtmfTones method
-    await this.callMedia.sendDtmfTones(dtmfTones, { phoneNumber: config.targetPhoneNumber });
+    await this.callMedia.sendDtmfTones(dtmfTones, this.targetParticipant);
   }
 
   async playText(text: string) {
@@ -87,10 +89,8 @@ export class CallManager extends EventEmitter {
   }
 
   async startRecognizing() {
-    if (!this.callMedia) return;
+    if (!this.callMedia || !this.targetParticipant) return;
     console.log("Start recognizing...");
-
-    const targetParticipant: PhoneNumberIdentifier = { phoneNumber: config.targetPhoneNumber };
 
     const recognizeOptions: CallMediaRecognizeSpeechOptions = {
         kind: "callMediaRecognizeSpeechOptions",
@@ -98,7 +98,7 @@ export class CallManager extends EventEmitter {
     };
 
     try {
-        await this.callMedia.startRecognizing(targetParticipant, recognizeOptions);
+        await this.callMedia.startRecognizing(this.targetParticipant, recognizeOptions);
     } catch (error) {
         console.error("Error starting recognition:", error);
     }

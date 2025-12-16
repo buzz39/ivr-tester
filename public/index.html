@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVR Tester Dashboard</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; }
+        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 12px; box-sizing: border-box; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        #status { margin-top: 20px; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 4px; height: 300px; overflow-y: auto; font-family: monospace; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>IVR Tester Dashboard</h1>
+
+    <div class="card">
+        <h2>Start New Test</h2>
+        <label for="phoneNumber">Target Phone Number:</label>
+        <input type="text" id="phoneNumber" placeholder="+15551234567">
+        <button id="startBtn">Start Call</button>
+        <p id="message"></p>
+    </div>
+
+    <!--
+    <div class="card">
+        <h2>Logs</h2>
+        <div id="status">Waiting for logs... (Logs are currently only in server console)</div>
+    </div>
+    -->
+
+    <script src="app.js"></script>
+</body>
+</html>

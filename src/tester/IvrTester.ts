@@ -111,10 +111,16 @@ export class IvrTester {
     });
   }
 
-  async run() {
+  async run(phoneNumber?: string) {
     this.isRunning = true;
+    const target = phoneNumber || config.targetPhoneNumber;
+    if (!target) {
+        console.error("No target phone number provided.");
+        this.isRunning = false;
+        return;
+    }
     try {
-      await this.callManager.startCall(config.targetPhoneNumber);
+      await this.callManager.startCall(target);
     } catch (e) {
       console.error("Failed to run test:", e);
       this.isRunning = false;
