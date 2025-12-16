@@ -11,18 +11,18 @@ async function main() {
   const callManager = new CallManager();
   const llm = new OpenAIClient();
   const tester = new IvrTester(callManager, llm);
-  const app = createServer(callManager);
+  const app = createServer(callManager, tester);
 
   const server = app.listen(config.port, () => {
     console.log(`Server listening on port ${config.port}`);
     console.log(`Callback URI should be configured to: ${config.callbackUri}`);
+    console.log(`Dashboard available at http://localhost:${config.port}`);
 
     // In a real scenario, we might wait for a trigger to start the test.
     // For now, let's auto-start if configured.
     if (config.targetPhoneNumber) {
+        console.log(`Auto-starting test call to ${config.targetPhoneNumber}...`);
         tester.run();
-    } else {
-        console.log("Please set TARGET_PHONE_NUMBER in .env to start the test.");
     }
   });
 
